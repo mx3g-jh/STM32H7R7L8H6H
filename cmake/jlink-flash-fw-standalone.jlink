@@ -1,0 +1,4 @@
+h
+loadfile ./build/APP.bin, 0x08000000
+r
+q

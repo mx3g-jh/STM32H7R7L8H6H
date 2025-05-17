@@ -1,4 +1,4 @@
 h
-loadfile ../Appli/build/STM32H7R7L8_Appli.bin, 0x08000000
+loadfile build/APP.bin, 0x08000000
 r
 q

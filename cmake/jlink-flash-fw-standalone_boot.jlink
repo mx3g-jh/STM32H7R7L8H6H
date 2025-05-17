@@ -1,4 +1,4 @@
 h
-loadfile ../Boot/build/STM32H7R7L8_Boot.bin, 0x08000000
+loadfile build/BOOT.bin, 0x08000000
 r
 q

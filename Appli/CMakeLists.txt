@@ -34,7 +34,7 @@ set(STM32_LINKER_OPTION  )
 include("../gcc-arm-none-eabi.cmake")
 
 # Set the project name
-set(CMAKE_PROJECT_NAME STM32H7R7L8_Appli)
+set(CMAKE_PROJECT_NAME APP)
 project(${CMAKE_PROJECT_NAME})
 
 # Create an executable object type
@@ -76,10 +76,11 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 add_custom_command(
-    TARGET STM32H7R7L8_Appli POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:STM32H7R7L8_Appli> ${CMAKE_SOURCE_DIR}/build/STM32H7R7L8_Appli.bin
-    COMMAND ${CMAKE_OBJCOPY} -O ihex   $<TARGET_FILE:STM32H7R7L8_Appli> ${CMAKE_SOURCE_DIR}/build/STM32H7R7L8_Appli.hex
+    TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_SOURCE_DIR}/build/${CMAKE_PROJECT_NAME}.bin
+    COMMAND ${CMAKE_OBJCOPY} -O ihex   $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_SOURCE_DIR}/build/${CMAKE_PROJECT_NAME}.hex
     COMMENT "Generating .bin and .hex files from ELF"
+    COMMAND ${CMAKE_SIZE} -B $<TARGET_FILE:${CMAKE_PROJECT_NAME}>
 )
 
 # Validate that STM32CubeMX code is compatible with C standard

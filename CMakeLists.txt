@@ -14,20 +14,21 @@ set(CMAKE_CXX_COMPILER_FORCED "true")
 
 # Include toolchain file
 include("gcc-arm-none-eabi.cmake")
-
-# Set the project name
-set(CMAKE_PROJECT_NAME STM32H7R7L8)
-
+set(CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME})
 # Core project settings
 project(${CMAKE_PROJECT_NAME})
 
-# Include external project file
-include("mx-generated.cmake")
-
-set(MCU_NAME STM32H7R7L8)
+set(MCU_NAME ${USE_MCU_NAME})
 set(PROJECT_APP_BINARY_DIR ${CMAKE_SOURCE_DIR}/Appli/build)
 set(PROJECT_BOOT_BINARY_DIR ${CMAKE_SOURCE_DIR}/Boot/build)
 include(${CMAKE_DIR}/gcc-jlink.cmake)
+
+if(CMAKE_COMMUNICATION_PROTOCOL MATCHES MAVLINK2)
+    message("-- COMMUNICATION_PROTOCOL: " ${CMAKE_COMMUNICATION_PROTOCOL})
+endif()
+
+# Include external project file
+include("mx-generated.cmake")
 
 # Astyle
 # --------------------------------------------------------------------
