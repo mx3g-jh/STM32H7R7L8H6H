@@ -229,19 +229,19 @@ void SystemCoreClockUpdate(void)
 			switch (pllsource) {
 			case 0x02:  /* HSE used as PLL1 clock source */
 				pllvco = ((float_t)HSE_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) +
-					 (pllfracn / (float_t)0x2000) + (float_t)1);
+						(pllfracn / (float_t)0x2000) + (float_t)1);
 				break;
 
 			case 0x01:  /* CSI used as PLL1 clock source */
 				pllvco = ((float_t)CSI_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) +
-					 (pllfracn / (float_t)0x2000) + (float_t)1);
+						(pllfracn / (float_t)0x2000) + (float_t)1);
 				break;
 
 			case 0x00:  /* HSI used as PLL1 clock source */
 			default:
 				hsivalue = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
 				pllvco = ((float_t)hsivalue / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) + (pllfracn /
-					 (float_t)0x2000) + (float_t)1);
+						(float_t)0x2000) + (float_t)1);
 				break;
 			}
 

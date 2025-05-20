@@ -3,7 +3,7 @@ set -eu
 
 # Check for the latest astyle version
 ASTYLE_VER_REQUIRED_1="Artistic Style Version 2.06"
-ASTYLE_VER_REQUIRED_2="Artistic Style Version 3.0"
+ASTYLE_VER_REQUIRED_2="Artistic Style Version 3.1"
 ASTYLE_VER_REQUIRED_3="Artistic Style Version 3.0.1"
 ASTYLE_VER_REQUIRED_4="Artistic Style Version 3.6.9"
 
