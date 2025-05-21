@@ -63,22 +63,35 @@
 void HAL_MspInit(void)
 {
 
-	/* Configure the system Power Supply */
+  /* Configure the system Power Supply */
 
-	if (HAL_PWREx_ConfigSupply(PWR_DIRECT_SMPS_SUPPLY) != HAL_OK) {
-		/* Initialization error */
-		Error_Handler();
-	}
+  if (HAL_PWREx_ConfigSupply(PWR_DIRECT_SMPS_SUPPLY) != HAL_OK)
+  {
+    /* Initialization error */
+    Error_Handler();
+  }
 
-	/* USER CODE BEGIN MspInit 0 */
+  /* USER CODE BEGIN MspInit 0 */
 
-	/* USER CODE END MspInit 0 */
+  /* USER CODE END MspInit 0 */
 
-	/* System interrupt init*/
+  /* System interrupt init*/
+  /* PendSV_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
 
-	/* USER CODE BEGIN MspInit 1 */
+  /* Enable the XSPIM_P1 interface */
+  HAL_PWREx_EnableXSPIM1();
 
-	/* USER CODE END MspInit 1 */
+  /* Enable USB Voltage detector */
+  if(HAL_PWREx_EnableUSBVoltageDetector() != HAL_OK)
+  {
+   /* Initialization error */
+   Error_Handler();
+  }
+
+  /* USER CODE BEGIN MspInit 1 */
+
+  /* USER CODE END MspInit 1 */
 }
 
 /* USER CODE BEGIN 1 */

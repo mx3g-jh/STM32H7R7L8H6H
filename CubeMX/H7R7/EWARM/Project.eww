@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<workspace>
-  <project>
-    <path>$WS_DIR$\Boot\H7R7_Boot.ewp</path>
-  </project><project>
-    <path>$WS_DIR$\Appli\H7R7_Appli.ewp</path>
-  </project>
-  <batchBuild />
-</workspace>

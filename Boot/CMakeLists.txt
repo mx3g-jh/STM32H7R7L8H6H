@@ -13,6 +13,10 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
+# Prevent the compiler from reporting an error
+add_compile_options(-Wno-unused-parameter)
+add_compile_options(-Wno-missing-field-initializers)
+
 # Define the build type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
