@@ -23,7 +23,7 @@
 #define __USBD_CONF_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -113,7 +113,7 @@
 
 #if (USBD_DEBUG_LEVEL > 0)
 #define USBD_UsrLog(...)    printf(__VA_ARGS__);\
-                            printf("\n");
+	printf("\n");
 #else
 #define USBD_UsrLog(...)
 #endif /* (USBD_DEBUG_LEVEL > 0U) */
@@ -121,16 +121,16 @@
 #if (USBD_DEBUG_LEVEL > 1)
 
 #define USBD_ErrLog(...)    printf("ERROR: ");\
-                            printf(__VA_ARGS__);\
-                            printf("\n");
+	printf(__VA_ARGS__);\
+	printf("\n");
 #else
 #define USBD_ErrLog(...)
 #endif /* (USBD_DEBUG_LEVEL > 1U) */
 
 #if (USBD_DEBUG_LEVEL > 2)
 #define USBD_DbgLog(...)    printf("DEBUG : ");\
-                            printf(__VA_ARGS__);\
-                            printf("\n");
+	printf(__VA_ARGS__);\
+	printf("\n");
 #else
 #define USBD_DbgLog(...)
 #endif /* (USBD_DEBUG_LEVEL > 2U) */
@@ -171,6 +171,7 @@ void USBD_static_free(void *p);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __USBD_CONF_H */

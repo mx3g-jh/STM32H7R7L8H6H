@@ -67,29 +67,29 @@
   * @{
   */
 #if !defined  (HSE_VALUE)
-  #define HSE_VALUE    24000000UL /*!< Value of the High-Speed External oscillator in Hz */
+	#define HSE_VALUE    24000000UL /*!< Value of the High-Speed External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSI_VALUE)
-  #define HSI_VALUE    64000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
+	#define HSI_VALUE    64000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
 #endif /* HSI_VALUE */
 
 #if !defined  (CSI_VALUE)
-  #define CSI_VALUE    4000000UL  /*!< Value of the Low-power Internal oscillator in Hz */
+	#define CSI_VALUE    4000000UL  /*!< Value of the Low-power Internal oscillator in Hz */
 #endif /* CSI_VALUE */
 
 /*!< The VTOR location information is based on information from the linker with a dependency
      on the IDE, the cortex register is updated using the INTVECT_START.
 */
 #if defined(__ICCARM__)
-extern uint32_t __vector_table;
-#define INTVECT_START ((uint32_t)& __vector_table)
+	extern uint32_t __vector_table;
+	#define INTVECT_START ((uint32_t)& __vector_table)
 #elif defined(__CC_ARM) || defined(__ARMCC_VERSION)
-extern void * __Vectors;
-#define INTVECT_START ((uint32_t) & __Vectors)
+	extern void *__Vectors;
+	#define INTVECT_START ((uint32_t) & __Vectors)
 #elif defined(__GNUC__)
-extern void * g_pfnVectors;
-#define INTVECT_START ((uint32_t)& g_pfnVectors)
+	extern void *g_pfnVectors;
+	#define INTVECT_START ((uint32_t)& g_pfnVectors)
 #endif /* __ICCARM__*/
 
 
@@ -110,13 +110,13 @@ extern void * g_pfnVectors;
 /** @addtogroup STM32H7RSxx_System_Private_Variables
   * @{
   */
-  /* The SystemCoreClock variable is updated in two ways:
-      1) by calling CMSIS function SystemCoreClockUpdate()
-      2) each time HAL_RCC_ClockConfig() is called to configure the system clock frequency
-         Note: If you use this function to configure the system clock; then there
-               is no need to call the first function listed above, since SystemCoreClock
-               variable is updated automatically.
-  */
+/* The SystemCoreClock variable is updated in two ways:
+    1) by calling CMSIS function SystemCoreClockUpdate()
+    2) each time HAL_RCC_ClockConfig() is called to configure the system clock frequency
+       Note: If you use this function to configure the system clock; then there
+             is no need to call the first function listed above, since SystemCoreClock
+             variable is updated automatically.
+*/
 uint32_t SystemCoreClock = HSI_VALUE;
 
 /**
@@ -142,13 +142,13 @@ uint32_t SystemCoreClock = HSI_VALUE;
 
 void SystemInit(void)
 {
-  /* Configure the Vector Table location -------------------------------------*/
-  SCB->VTOR = INTVECT_START;
+	/* Configure the Vector Table location -------------------------------------*/
+	SCB->VTOR = INTVECT_START;
 
-  /* FPU settings ------------------------------------------------------------*/
-#if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
-  SCB->CPACR |= ((3UL << 20U)|(3UL << 22U));  /* set CP10 and CP11 Full Access */
-#endif
+	/* FPU settings ------------------------------------------------------------*/
+	#if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+	SCB->CPACR |= ((3UL << 20U) | (3UL << 22U)); /* set CP10 and CP11 Full Access */
+	#endif
 }
 
 /**
@@ -194,81 +194,80 @@ void SystemInit(void)
   */
 void SystemCoreClockUpdate(void)
 {
-  uint32_t sysclk, hsivalue, pllsource, pllm, pllp, core_presc;
-  float_t pllfracn, pllvco;
+	uint32_t sysclk, hsivalue, pllsource, pllm, pllp, core_presc;
+	float_t pllfracn, pllvco;
 
-  /* Get SYSCLK source -------------------------------------------------------*/
-  switch (RCC->CFGR & RCC_CFGR_SWS)
-  {
-  case 0x00:  /* HSI used as system clock source (default after reset) */
-    sysclk = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
-    break;
+	/* Get SYSCLK source -------------------------------------------------------*/
+	switch (RCC->CFGR & RCC_CFGR_SWS) {
+	case 0x00:  /* HSI used as system clock source (default after reset) */
+		sysclk = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
+		break;
 
-  case 0x08:  /* CSI used as system clock source */
-    sysclk = CSI_VALUE;
-    break;
+	case 0x08:  /* CSI used as system clock source */
+		sysclk = CSI_VALUE;
+		break;
 
-  case 0x10:  /* HSE used as system clock source */
-    sysclk = HSE_VALUE;
-    break;
+	case 0x10:  /* HSE used as system clock source */
+		sysclk = HSE_VALUE;
+		break;
 
-  case 0x18:  /* PLL1 used as system clock  source */
-    /* PLL1_VCO = (HSE_VALUE or HSI_VALUE or CSI_VALUE/ PLLM) * PLLN
-       SYSCLK = PLL1_VCO / PLL1R
-       */
-    pllsource = (RCC->PLLCKSELR & RCC_PLLCKSELR_PLLSRC);
-    pllm = ((RCC->PLLCKSELR & RCC_PLLCKSELR_DIVM1) >> RCC_PLLCKSELR_DIVM1_Pos)  ;
-    if ((RCC->PLLCFGR & RCC_PLLCFGR_PLL1FRACEN) != 0U)
-    {
-      pllfracn = (float_t)(uint32_t)(((RCC->PLL1FRACR & RCC_PLL1FRACR_FRACN)>> RCC_PLL1FRACR_FRACN_Pos));
-    }
-    else
-    {
-      pllfracn = (float_t)0U;
-    }
+	case 0x18:  /* PLL1 used as system clock  source */
+		/* PLL1_VCO = (HSE_VALUE or HSI_VALUE or CSI_VALUE/ PLLM) * PLLN
+		   SYSCLK = PLL1_VCO / PLL1R
+		   */
+		pllsource = (RCC->PLLCKSELR & RCC_PLLCKSELR_PLLSRC);
+		pllm = ((RCC->PLLCKSELR & RCC_PLLCKSELR_DIVM1) >> RCC_PLLCKSELR_DIVM1_Pos)  ;
 
-    if (pllm != 0U)
-    {
-      switch (pllsource)
-      {
-      case 0x02:  /* HSE used as PLL1 clock source */
-        pllvco = ((float_t)HSE_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) + (pllfracn/(float_t)0x2000) +(float_t)1 );
-        break;
+		if ((RCC->PLLCFGR & RCC_PLLCFGR_PLL1FRACEN) != 0U) {
+			pllfracn = (float_t)(uint32_t)(((RCC->PLL1FRACR & RCC_PLL1FRACR_FRACN) >> RCC_PLL1FRACR_FRACN_Pos));
 
-      case 0x01:  /* CSI used as PLL1 clock source */
-        pllvco = ((float_t)CSI_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) + (pllfracn/(float_t)0x2000) +(float_t)1 );
-        break;
+		} else {
+			pllfracn = (float_t)0U;
+		}
 
-      case 0x00:  /* HSI used as PLL1 clock source */
-      default:
-        hsivalue = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
-        pllvco = ( (float_t)hsivalue / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) + (pllfracn/(float_t)0x2000) +(float_t)1 );
-        break;
-      }
-      pllp = (((RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVP) >> RCC_PLL1DIVR1_DIVP_Pos) + 1U ) ;
-      sysclk =  (uint32_t)(float_t)(pllvco/(float_t)pllp);
-    }
-    else
-    {
-      sysclk = 0U;
-    }
-    break;
+		if (pllm != 0U) {
+			switch (pllsource) {
+			case 0x02:  /* HSE used as PLL1 clock source */
+				pllvco = ((float_t)HSE_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) +
+					 (pllfracn / (float_t)0x2000) + (float_t)1);
+				break;
 
-  default:  /* Unexpected, default to HSI used as system clock source (default after reset) */
-    sysclk = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
-    break;
-  }
+			case 0x01:  /* CSI used as PLL1 clock source */
+				pllvco = ((float_t)CSI_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) +
+					 (pllfracn / (float_t)0x2000) + (float_t)1);
+				break;
 
-  /* system clock frequency : CM7 CPU frequency  */
-  core_presc = (RCC->CDCFGR & RCC_CDCFGR_CPRE);
-  if (core_presc >= 8U)
-  {
-    SystemCoreClock = (sysclk >> (core_presc - RCC_CDCFGR_CPRE_3 + 1U));
-  }
-  else
-  {
-    SystemCoreClock = sysclk;
-  }
+			case 0x00:  /* HSI used as PLL1 clock source */
+			default:
+				hsivalue = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
+				pllvco = ((float_t)hsivalue / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVN) + (pllfracn /
+					 (float_t)0x2000) + (float_t)1);
+				break;
+			}
+
+			pllp = (((RCC->PLL1DIVR1 & RCC_PLL1DIVR1_DIVP) >> RCC_PLL1DIVR1_DIVP_Pos) + 1U) ;
+			sysclk = (uint32_t)(float_t)(pllvco / (float_t)pllp);
+
+		} else {
+			sysclk = 0U;
+		}
+
+		break;
+
+	default:  /* Unexpected, default to HSI used as system clock source (default after reset) */
+		sysclk = (HSI_VALUE >> ((RCC->CR & RCC_CR_HSIDIV) >> RCC_CR_HSIDIV_Pos));
+		break;
+	}
+
+	/* system clock frequency : CM7 CPU frequency  */
+	core_presc = (RCC->CDCFGR & RCC_CDCFGR_CPRE);
+
+	if (core_presc >= 8U) {
+		SystemCoreClock = (sysclk >> (core_presc - RCC_CDCFGR_CPRE_3 + 1U));
+
+	} else {
+		SystemCoreClock = sysclk;
+	}
 }
 
 

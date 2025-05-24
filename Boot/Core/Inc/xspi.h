@@ -46,6 +46,7 @@ void MX_XSPI1_Init(void);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __XSPI_H__ */

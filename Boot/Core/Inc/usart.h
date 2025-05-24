@@ -46,6 +46,7 @@ void MX_USART1_UART_Init(void);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __USART_H__ */

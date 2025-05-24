@@ -51,44 +51,46 @@
 #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
 
 #if ( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
-    #error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+	#error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
 #endif
 
 /*-----------------------------------------------------------*/
 
-void * pvPortMalloc( size_t xWantedSize )
+void *pvPortMalloc(size_t xWantedSize)
 {
-    void * pvReturn;
+	void *pvReturn;
 
-    vTaskSuspendAll();
-    {
-        pvReturn = malloc( xWantedSize );
-        traceMALLOC( pvReturn, xWantedSize );
-    }
-    ( void ) xTaskResumeAll();
+	vTaskSuspendAll();
+	{
+		pvReturn = malloc(xWantedSize);
+		traceMALLOC(pvReturn, xWantedSize);
+	}
 
-    #if ( configUSE_MALLOC_FAILED_HOOK == 1 )
-    {
-        if( pvReturn == NULL )
-        {
-            vApplicationMallocFailedHook();
-        }
-    }
-    #endif
+	(void) xTaskResumeAll();
 
-    return pvReturn;
+	#if ( configUSE_MALLOC_FAILED_HOOK == 1 )
+	{
+		if (pvReturn == NULL) {
+			vApplicationMallocFailedHook();
+		}
+	}
+
+	#endif
+
+	return pvReturn;
 }
+
 /*-----------------------------------------------------------*/
 
-void vPortFree( void * pv )
+void vPortFree(void * pv)
 {
-    if( pv != NULL )
-    {
-        vTaskSuspendAll();
-        {
-            free( pv );
-            traceFREE( pv, 0 );
-        }
-        ( void ) xTaskResumeAll();
-    }
+	if (pv != NULL) {
+		vTaskSuspendAll();
+		{
+			free(pv);
+			traceFREE(pv, 0);
+		}
+
+		(void) xTaskResumeAll();
+	}
 }

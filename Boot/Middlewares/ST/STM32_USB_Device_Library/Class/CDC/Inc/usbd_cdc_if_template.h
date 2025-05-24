@@ -37,6 +37,7 @@ extern USBD_CDC_ItfTypeDef  USBD_CDC_Template_fops;
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __USBD_CDC_IF_TEMPLATE_H */

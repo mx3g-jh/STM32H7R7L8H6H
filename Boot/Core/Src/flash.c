@@ -28,16 +28,16 @@
 void MX_FLASH_Init(void)
 {
 
-  /* USER CODE BEGIN FLASH_Init 0 */
+	/* USER CODE BEGIN FLASH_Init 0 */
 
-  /* USER CODE END FLASH_Init 0 */
+	/* USER CODE END FLASH_Init 0 */
 
-  /* USER CODE BEGIN FLASH_Init 1 */
+	/* USER CODE BEGIN FLASH_Init 1 */
 
-  /* USER CODE END FLASH_Init 1 */
-  /* USER CODE BEGIN FLASH_Init 2 */
+	/* USER CODE END FLASH_Init 1 */
+	/* USER CODE BEGIN FLASH_Init 2 */
 
-  /* USER CODE END FLASH_Init 2 */
+	/* USER CODE END FLASH_Init 2 */
 
 }
 

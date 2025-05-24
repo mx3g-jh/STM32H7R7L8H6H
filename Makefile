@@ -84,6 +84,8 @@ clean:
 # use dos2unix fix style
 # brew install dos2unix
 # dos2unix xxx.xx
+dos2unix_all:
+	@find ./ -type f -exec dos2unix {} \;
 
 # Define check_format target
 check_format:

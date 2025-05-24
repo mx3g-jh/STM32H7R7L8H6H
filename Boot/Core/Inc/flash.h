@@ -44,6 +44,7 @@ void MX_FLASH_Init(void);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __Flash_H__ */

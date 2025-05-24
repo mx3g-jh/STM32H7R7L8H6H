@@ -46,6 +46,7 @@ void MX_TIM1_Init(void);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __TIM_H__ */

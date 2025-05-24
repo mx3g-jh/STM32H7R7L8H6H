@@ -61,6 +61,7 @@ void OTG_FS_IRQHandler(void);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 #endif /* __STM32H7RSxx_IT_H */

@@ -43,7 +43,7 @@ TIM_HandleTypeDef htim2;
 
 /* Private function prototypes -----------------------------------------------*/
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
-void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+	void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
 /* Private functions ---------------------------------------------------------*/
 
@@ -58,89 +58,83 @@ void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
-  RCC_ClkInitTypeDef    clkconfig;
-  uint32_t              uwTimclock;
-  uint32_t              uwAPB1Prescaler;
-  uint32_t              uwPrescalerValue;
-  uint32_t              pFLatency;
-  HAL_StatusTypeDef     Status;
+	RCC_ClkInitTypeDef    clkconfig;
+	uint32_t              uwTimclock;
+	uint32_t              uwAPB1Prescaler;
+	uint32_t              uwPrescalerValue;
+	uint32_t              pFLatency;
+	HAL_StatusTypeDef     Status;
 
-  /* Enable TIM2 clock */
-  __HAL_RCC_TIM2_CLK_ENABLE();
+	/* Enable TIM2 clock */
+	__HAL_RCC_TIM2_CLK_ENABLE();
 
-  /* Get clock configuration */
-  HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
+	/* Get clock configuration */
+	HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
 
-  /* Get APB1 prescaler */
-  uwAPB1Prescaler = clkconfig.APB1CLKDivider;
+	/* Get APB1 prescaler */
+	uwAPB1Prescaler = clkconfig.APB1CLKDivider;
 
-  /* Compute TIM2 clock */
-  if (uwAPB1Prescaler == RCC_APB1_DIV1)
-  {
-    uwTimclock = HAL_RCC_GetPCLK1Freq();
-  }
-  else if (uwAPB1Prescaler == RCC_APB1_DIV2)
-  {
-    uwTimclock = 2UL * HAL_RCC_GetPCLK1Freq();
-  }
-  else
-  {
-    if (__HAL_RCC_GET_TIMCLKPRESCALER() == RCC_TIMPRES_DISABLE)
-    {
-      uwTimclock = 2UL * HAL_RCC_GetPCLK1Freq();
-    }
-    else
-    {
-      uwTimclock = 4UL * HAL_RCC_GetPCLK1Freq();
-    }
-  }
+	/* Compute TIM2 clock */
+	if (uwAPB1Prescaler == RCC_APB1_DIV1) {
+		uwTimclock = HAL_RCC_GetPCLK1Freq();
 
-  /* Compute the prescaler value to have TIM2 counter clock equal to TIM_CNT_FREQ */
-  uwPrescalerValue = (uint32_t)((uwTimclock / TIM_CNT_FREQ) - 1U);
+	} else
+		if (uwAPB1Prescaler == RCC_APB1_DIV2) {
+			uwTimclock = 2UL * HAL_RCC_GetPCLK1Freq();
 
-  /* Initialize TIM2 */
-  htim2.Instance = TIM2;
+		} else {
+			if (__HAL_RCC_GET_TIMCLKPRESCALER() == RCC_TIMPRES_DISABLE) {
+				uwTimclock = 2UL * HAL_RCC_GetPCLK1Freq();
 
-  /* Initialize TIMx peripheral as follow:
-  + Period = [uwTickFreq * (TIM_CNT_FREQ/TIM_FREQ) - 1]. to have a (uwTickFreq/TIM_FREQ) s time base.
-  + Prescaler = (uwTimclock/TIM_CNT_FREQ - 1) to have a TIM_CNT_FREQ counter clock.
-  + ClockDivision = 0
-  + Counter direction = Up
-  */
-  htim2.Init.Period = ((uint32_t)uwTickFreq  * (TIM_CNT_FREQ / TIM_FREQ)) - 1U;
-  htim2.Init.Prescaler = uwPrescalerValue;
-  htim2.Init.ClockDivision = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  Status = HAL_TIM_Base_Init(&htim2);
-  if (Status == HAL_OK)
-  {
-#if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
-    HAL_TIM_RegisterCallback(&htim2, HAL_TIM_PERIOD_ELAPSED_CB_ID, TimeBase_TIM_PeriodElapsedCallback);
-#endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
-    /* Start the TIM time Base generation in interrupt mode */
-    Status = HAL_TIM_Base_Start_IT(&htim2);
-    if (Status == HAL_OK)
-    {
-      if (TickPriority < (1UL << __NVIC_PRIO_BITS))
-      {
-        /* Configure the TIM2 global Interrupt priority */
-        HAL_NVIC_SetPriority(TIM2_IRQn, TickPriority, 0);
+			} else {
+				uwTimclock = 4UL * HAL_RCC_GetPCLK1Freq();
+			}
+		}
 
-        /* Enable the TIM2 global Interrupt */
-        HAL_NVIC_EnableIRQ(TIM2_IRQn);
+	/* Compute the prescaler value to have TIM2 counter clock equal to TIM_CNT_FREQ */
+	uwPrescalerValue = (uint32_t)((uwTimclock / TIM_CNT_FREQ) - 1U);
 
-        uwTickPrio = TickPriority;
-      }
-      else
-      {
-        Status = HAL_ERROR;
-      }
-    }
-  }
+	/* Initialize TIM2 */
+	htim2.Instance = TIM2;
 
-  /* Return function status */
-  return Status;
+	/* Initialize TIMx peripheral as follow:
+	+ Period = [uwTickFreq * (TIM_CNT_FREQ/TIM_FREQ) - 1]. to have a (uwTickFreq/TIM_FREQ) s time base.
+	+ Prescaler = (uwTimclock/TIM_CNT_FREQ - 1) to have a TIM_CNT_FREQ counter clock.
+	+ ClockDivision = 0
+	+ Counter direction = Up
+	*/
+	htim2.Init.Period = ((uint32_t)uwTickFreq  * (TIM_CNT_FREQ / TIM_FREQ)) - 1U;
+	htim2.Init.Prescaler = uwPrescalerValue;
+	htim2.Init.ClockDivision = 0;
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	Status = HAL_TIM_Base_Init(&htim2);
+
+	if (Status == HAL_OK) {
+		#if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
+		HAL_TIM_RegisterCallback(&htim2, HAL_TIM_PERIOD_ELAPSED_CB_ID, TimeBase_TIM_PeriodElapsedCallback);
+		#endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+		/* Start the TIM time Base generation in interrupt mode */
+		Status = HAL_TIM_Base_Start_IT(&htim2);
+
+		if (Status == HAL_OK) {
+			if (TickPriority < (1UL << __NVIC_PRIO_BITS)) {
+				/* Configure the TIM2 global Interrupt priority */
+				HAL_NVIC_SetPriority(TIM2_IRQn, TickPriority, 0);
+
+				/* Enable the TIM2 global Interrupt */
+				HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+				uwTickPrio = TickPriority;
+
+			} else {
+				Status = HAL_ERROR;
+			}
+		}
+	}
+
+	/* Return function status */
+	return Status;
 }
 
 /**
@@ -150,8 +144,8 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 void HAL_SuspendTick(void)
 {
-  /* Disable TIM2 update interrupt */
-  __HAL_TIM_DISABLE_IT(&htim2, TIM_IT_UPDATE);
+	/* Disable TIM2 update interrupt */
+	__HAL_TIM_DISABLE_IT(&htim2, TIM_IT_UPDATE);
 }
 
 /**
@@ -161,8 +155,8 @@ void HAL_SuspendTick(void)
   */
 void HAL_ResumeTick(void)
 {
-  /* Enable TIM2 update interrupt */
-  __HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
+	/* Enable TIM2 update interrupt */
+	__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);
 }
 
 /**
@@ -176,12 +170,13 @@ void HAL_ResumeTick(void)
 #if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
 void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(htim);
+	/* Prevent unused argument(s) compilation warning */
+	UNUSED(htim);
 
-  HAL_IncTick();
+	HAL_IncTick();
 
 }
+
 #endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
 /**
   * @}

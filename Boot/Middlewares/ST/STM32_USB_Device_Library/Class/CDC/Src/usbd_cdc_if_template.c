@@ -69,21 +69,19 @@ static int8_t TEMPLATE_Control(uint8_t cmd, uint8_t *pbuf, uint16_t length);
 static int8_t TEMPLATE_Receive(uint8_t *pbuf, uint32_t *Len);
 static int8_t TEMPLATE_TransmitCplt(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
 
-USBD_CDC_ItfTypeDef USBD_CDC_Template_fops =
-{
-  TEMPLATE_Init,
-  TEMPLATE_DeInit,
-  TEMPLATE_Control,
-  TEMPLATE_Receive,
-  TEMPLATE_TransmitCplt
+USBD_CDC_ItfTypeDef USBD_CDC_Template_fops = {
+	TEMPLATE_Init,
+	TEMPLATE_DeInit,
+	TEMPLATE_Control,
+	TEMPLATE_Receive,
+	TEMPLATE_TransmitCplt
 };
 
-USBD_CDC_LineCodingTypeDef linecoding =
-{
-  115200, /* baud rate*/
-  0x00,   /* stop bits-1*/
-  0x00,   /* parity - none*/
-  0x08    /* nb. of bits 8*/
+USBD_CDC_LineCodingTypeDef linecoding = {
+	115200, /* baud rate*/
+	0x00,   /* stop bits-1*/
+	0x00,   /* parity - none*/
+	0x08    /* nb. of bits 8*/
 };
 
 /* Private functions ---------------------------------------------------------*/
@@ -96,10 +94,10 @@ USBD_CDC_LineCodingTypeDef linecoding =
   */
 static int8_t TEMPLATE_Init(void)
 {
-  /*
-     Add your initialization code here
-  */
-  return (0);
+	/*
+	   Add your initialization code here
+	*/
+	return (0);
 }
 
 /**
@@ -110,10 +108,10 @@ static int8_t TEMPLATE_Init(void)
   */
 static int8_t TEMPLATE_DeInit(void)
 {
-  /*
-     Add your deinitialization code here
-  */
-  return (0);
+	/*
+	   Add your deinitialization code here
+	*/
+	return (0);
 }
 
 
@@ -127,65 +125,64 @@ static int8_t TEMPLATE_DeInit(void)
   */
 static int8_t TEMPLATE_Control(uint8_t cmd, uint8_t *pbuf, uint16_t length)
 {
-  UNUSED(length);
+	UNUSED(length);
 
-  switch (cmd)
-  {
-    case CDC_SEND_ENCAPSULATED_COMMAND:
-      /* Add your code here */
-      break;
+	switch (cmd) {
+	case CDC_SEND_ENCAPSULATED_COMMAND:
+		/* Add your code here */
+		break;
 
-    case CDC_GET_ENCAPSULATED_RESPONSE:
-      /* Add your code here */
-      break;
+	case CDC_GET_ENCAPSULATED_RESPONSE:
+		/* Add your code here */
+		break;
 
-    case CDC_SET_COMM_FEATURE:
-      /* Add your code here */
-      break;
+	case CDC_SET_COMM_FEATURE:
+		/* Add your code here */
+		break;
 
-    case CDC_GET_COMM_FEATURE:
-      /* Add your code here */
-      break;
+	case CDC_GET_COMM_FEATURE:
+		/* Add your code here */
+		break;
 
-    case CDC_CLEAR_COMM_FEATURE:
-      /* Add your code here */
-      break;
+	case CDC_CLEAR_COMM_FEATURE:
+		/* Add your code here */
+		break;
 
-    case CDC_SET_LINE_CODING:
-      linecoding.bitrate    = (uint32_t)(pbuf[0] | (pbuf[1] << 8) | \
-                                         (pbuf[2] << 16) | (pbuf[3] << 24));
-      linecoding.format     = pbuf[4];
-      linecoding.paritytype = pbuf[5];
-      linecoding.datatype   = pbuf[6];
+	case CDC_SET_LINE_CODING:
+		linecoding.bitrate    = (uint32_t)(pbuf[0] | (pbuf[1] << 8) | \
+						   (pbuf[2] << 16) | (pbuf[3] << 24));
+		linecoding.format     = pbuf[4];
+		linecoding.paritytype = pbuf[5];
+		linecoding.datatype   = pbuf[6];
 
-      /* Add your code here */
-      break;
+		/* Add your code here */
+		break;
 
-    case CDC_GET_LINE_CODING:
-      pbuf[0] = (uint8_t)(linecoding.bitrate);
-      pbuf[1] = (uint8_t)(linecoding.bitrate >> 8);
-      pbuf[2] = (uint8_t)(linecoding.bitrate >> 16);
-      pbuf[3] = (uint8_t)(linecoding.bitrate >> 24);
-      pbuf[4] = linecoding.format;
-      pbuf[5] = linecoding.paritytype;
-      pbuf[6] = linecoding.datatype;
+	case CDC_GET_LINE_CODING:
+		pbuf[0] = (uint8_t)(linecoding.bitrate);
+		pbuf[1] = (uint8_t)(linecoding.bitrate >> 8);
+		pbuf[2] = (uint8_t)(linecoding.bitrate >> 16);
+		pbuf[3] = (uint8_t)(linecoding.bitrate >> 24);
+		pbuf[4] = linecoding.format;
+		pbuf[5] = linecoding.paritytype;
+		pbuf[6] = linecoding.datatype;
 
-      /* Add your code here */
-      break;
+		/* Add your code here */
+		break;
 
-    case CDC_SET_CONTROL_LINE_STATE:
-      /* Add your code here */
-      break;
+	case CDC_SET_CONTROL_LINE_STATE:
+		/* Add your code here */
+		break;
 
-    case CDC_SEND_BREAK:
-      /* Add your code here */
-      break;
+	case CDC_SEND_BREAK:
+		/* Add your code here */
+		break;
 
-    default:
-      break;
-  }
+	default:
+		break;
+	}
 
-  return (0);
+	return (0);
 }
 
 /**
@@ -206,10 +203,10 @@ static int8_t TEMPLATE_Control(uint8_t cmd, uint8_t *pbuf, uint16_t length)
   */
 static int8_t TEMPLATE_Receive(uint8_t *Buf, uint32_t *Len)
 {
-  UNUSED(Buf);
-  UNUSED(Len);
+	UNUSED(Buf);
+	UNUSED(Len);
 
-  return (0);
+	return (0);
 }
 
 /**
@@ -226,11 +223,11 @@ static int8_t TEMPLATE_Receive(uint8_t *Buf, uint32_t *Len)
   */
 static int8_t TEMPLATE_TransmitCplt(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 {
-  UNUSED(Buf);
-  UNUSED(Len);
-  UNUSED(epnum);
+	UNUSED(Buf);
+	UNUSED(Len);
+	UNUSED(epnum);
 
-  return (0);
+	return (0);
 }
 
 /**
